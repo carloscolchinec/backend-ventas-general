@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: mysql_ventas
+    restart: always
+    environment:
+      MYSQL_DATABASE: ventas_seroficom_db
+      MYSQL_ROOT_PASSWORD: root_password_seguro
+    ports:
+      - "3307:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: pma_ventas
+    restart: always
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: db
+    depends_on:
+      - db
+
+  app:
+    build:
+      context: ./backend  # <-- Indica que el Dockerfile está en la carpeta backend
+      dockerfile: Dockerfile
+    container_name: node_api_ventas
+    restart: always
+    ports:
+      - "3100:3100"
+    env_file:
+      - ./backend/${ENV_FILE:-.env.development} # Busca el .env dentro de backend
+    depends_on:
+      - db
+
+volumes:
+  db_data:
