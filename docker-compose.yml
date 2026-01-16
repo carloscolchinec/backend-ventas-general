@@ -24,17 +24,18 @@ services:
     environment:
       PMA_HOST: db
       PMA_ARBITRARY: 1
-      # Esta configuración deshabilita la validación estricta de cookies para HTTP
+      # Configuración avanzada para forzar cookies en HTTP
       PMA_CONFIG_PARAMETERS: |
         $cfg['CookieSecure'] = false;
-        $cfg['LoginCookieValidity'] = 3600;
+        $cfg['CheckConfigurationPermissions'] = false;
+        $cfg['LoginCookieValidity'] = 1440;
         $cfg['SessionSavePath'] = '/tmp';
     depends_on:
       - db
     networks:
       - apps-network
 
-      
+
   backend:
     build:
       context: ./backend
