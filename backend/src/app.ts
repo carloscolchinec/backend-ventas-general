@@ -23,7 +23,8 @@ app.use('/api', routes);
 
 // 404 Handler
 app.use((req, res) => {
-    res.status(404).json({ message: 'Ruta no encontrada' });
+    // res.status(404).json({ message: 'Ruta no encontrada' });
+    res.redirect(301, 'https://seroficom.com');
 });
 
 export default app;
