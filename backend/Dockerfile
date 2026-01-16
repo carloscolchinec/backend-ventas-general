@@ -1,23 +1,16 @@
-# Usa una imagen de Node ligera
 FROM node:20-alpine
 
-# Crear directorio de trabajo
 WORKDIR /app
 
-# Copiar archivos de dependencias
+# Instalación de dependencias
 COPY package*.json ./
+RUN npm install --production
 
-# Instalar dependencias
-RUN npm install
-
-# Copiar el resto del código
+# Copia de archivos y construcción
 COPY . .
-
-# Compilar el proyecto (ya que veo una carpeta 'dist' y 'ts' en tu captura)
 RUN npm run build
 
-# Exponer el puerto
+# El puerto interno que tu app escucha es el 3100
 EXPOSE 3100
 
-# Comando para arrancar
 CMD ["npm", "start"]

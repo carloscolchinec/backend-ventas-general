@@ -1,27 +1,28 @@
 version: '3.8'
 
 services:
+  # --- BASE DE DATOS ---
   db:
     image: mysql:8.0
-    container_name: mysql_ventas
+    container_name: socventas-db
     restart: always
     environment:
-      # Estos valores se jalan de la pestaña "Environment Variables" en Portainer
       MYSQL_DATABASE: ${DB_NAME}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     ports:
-      - "5073:3306" # Mapeo: Externo 5073 -> Interno 3306
+      - "5073:3306" # Público: 5073 -> Interno: 3306
     volumes:
-      - db_data:/var/lib/mysql
+      - socventas_db_data:/var/lib/mysql
     networks:
       - apps-network
 
+  # --- GESTOR DB ---
   phpmyadmin:
     image: phpmyadmin:latest
-    container_name: pma_ventas
+    container_name: socventas-phpmyadmin
     restart: always
     ports:
-      - "5072:80" # Mapeo: Externo 5072 -> Interno 80
+      - "5072:80" # Público: 5072 -> Interno: 80
     environment:
       PMA_HOST: db
     depends_on:
@@ -29,14 +30,15 @@ services:
     networks:
       - apps-network
 
-  app:
+  # --- BACKEND NODE.JS ---
+  backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: node_api_ventas
+    container_name: socventas-backend
     restart: always
     ports:
-      - "5070:3100" # Mapeo: Externo 5070 -> Interno 3100
+      - "5070:3100" # Público: 5070 -> Interno: 3100
     env_file:
       - ./backend/.env.production
     depends_on:
@@ -49,4 +51,4 @@ networks:
     external: true
 
 volumes:
-  db_data:
+  socventas_db_data: # Nombre único para no mezclar con otros stacks
