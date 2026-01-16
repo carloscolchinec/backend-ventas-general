@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  db:
+  db-seroficom:
     image: mysql:8.0
     container_name: socventas-db
     restart: always
@@ -11,7 +11,7 @@ services:
     ports:
       - "5073:3306"
     volumes:
-      - socventas_db_produccion_final:/var/lib/mysql # Nombre nuevo y único
+      - socventas_vol_final_definitivo:/var/lib/mysql
     networks:
       - apps-network
 
@@ -22,12 +22,12 @@ services:
     ports:
       - "5072:80"
     environment:
-      PMA_HOST: db
+      PMA_HOST: db-seroficom
       PMA_ARBITRARY: 1
       PMA_CONFIG_PARAMETERS: |
         $cfg['CookieSecure'] = false;
     depends_on:
-      - db
+      - db-seroficom
     networks:
       - apps-network
 
@@ -40,13 +40,14 @@ services:
     ports:
       - "5070:3100"
     environment:
-      - DB_HOST=db
+      - DB_HOST=db-seroficom
       - DB_PORT=3306
       - DB_USERNAME=root
-      - DB_PASSWORD=Seroficom_Secure_2025!
+      - DB_PASSWORD=Seroficom_Secure_2025! # Coincide con el código corregido
       - DB_NAME=ventas_seroficom_db
+      - NODE_ENV=production
     depends_on:
-      - db
+      - db-seroficom
     networks:
       - apps-network
 
@@ -55,4 +56,4 @@ networks:
     external: true
 
 volumes:
-  socventas_db_produccion_final: # Se creará limpio ahora
+  socventas_vol_final_definitivo: # Forzamos un volumen nuevo
