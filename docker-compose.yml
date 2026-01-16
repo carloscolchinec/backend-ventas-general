@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  db:
+  db-socventas:
     image: mysql:8.0
     container_name: socventas-db
     restart: always
@@ -11,7 +11,7 @@ services:
     ports:
       - "5073:3306"
     volumes:
-      - socventas_final_data:/var/lib/mysql # Nombre de volumen nuevo para evitar choques
+      - socventas_db_final:/var/lib/mysql
     networks:
       - apps-network
 
@@ -22,11 +22,14 @@ services:
     ports:
       - "5072:80"
     environment:
-      PMA_HOST: db
+      # Debe coincidir con el nombre del servicio de arriba
+      PMA_HOST: db-socventas
+      PMA_ARBITRARY: 1
       PMA_CONFIG_PARAMETERS: |
         $cfg['CookieSecure'] = false;
+        $cfg['LoginCookieValidity'] = 3600;
     depends_on:
-      - db
+      - db-socventas
     networks:
       - apps-network
 
@@ -39,13 +42,15 @@ services:
     ports:
       - "5070:3100"
     environment:
-      - DB_HOST=db
-      - DB_PORT=3306
-      - DB_USERNAME=root
-      - DB_PASSWORD=Seroficom_Secure_2025!
-      - DB_NAME=ventas_seroficom_db
+      # FORZAMOS LAS VARIABLES AQUÍ (Esto ignora el .env defectuoso)
+      DB_HOST: db-socventas
+      DB_PORT: 3306
+      DB_USERNAME: root
+      DB_PASSWORD: "Seroficom_Secure_2025!"
+      DB_NAME: ventas_seroficom_db
+      NODE_ENV: production
     depends_on:
-      - db
+      - db-socventas
     networks:
       - apps-network
 
@@ -54,4 +59,4 @@ networks:
     external: true
 
 volumes:
-  socventas_final_data: # Definición del volumen nuevo
+  socventas_db_final:
