@@ -1,24 +1,24 @@
-FROM node:20-alpine
-
+# Etapa 1: Build
+FROM node:20-alpine AS builder
 WORKDIR /app
-
-# 1. Copiar archivos de configuración de dependencias
 COPY package*.json ./
-COPY tsconfig.json ./
-
-# 2. Instalar TODAS las dependencias (incluyendo TypeScript para el build)
+# Instalamos todas las dependencias para poder compilar
 RUN npm install
-
-# 3. Copiar el código fuente
 COPY . .
-
-# 4. Ejecutar el build con logs detallados
-# Si esto falla, los logs de Portainer te dirán exactamente en qué línea de qué archivo está el error
+# Esto generará la carpeta /dist
 RUN npm run build
 
-# 5. (Opcional) Limpiar dependencias de desarrollo para producción
-# RUN npm prune --production
+# Etapa 2: Producción
+FROM node:20-alpine
+WORKDIR /app
+COPY package*.json ./
+# Instalamos solo dependencias de ejecución (más ligero)
+RUN npm install --production
+# Copiamos solo lo compilado y los archivos necesarios
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/.env.production ./.env.production
+COPY --from=builder /app/public ./public
 
 EXPOSE 3100
-
+# Asegúrate de que tu package.json tenga: "start": "node dist/server.js"
 CMD ["npm", "start"]
