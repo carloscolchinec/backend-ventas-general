@@ -6,9 +6,8 @@ services:
     container_name: socventas-db
     restart: always
     environment:
-      # Definimos valores fijos aquí para evitar el error de "uninitialized"
       MYSQL_DATABASE: ventas_seroficom_db
-      MYSQL_ROOT_PASSWORD: TuClaveSegura2026
+      MYSQL_ROOT_PASSWORD: "Seroficom_Secure_2025!" # Usa comillas para evitar errores de símbolos
     ports:
       - "5073:3306"
     volumes:
@@ -38,9 +37,14 @@ services:
     restart: always
     ports:
       - "5070:3100"
-    # Forzamos la lectura del archivo de producción
-    env_file:
-      - ./backend/.env.production
+    environment:
+      # Forzamos las variables para que Node las reconozca 100%
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_USERNAME=root
+      - DB_PASSWORD=Seroficom_Secure_2025!
+      - DB_NAME=ventas_seroficom_db
+      - NODE_ENV=production
     depends_on:
       - db
     networks:
