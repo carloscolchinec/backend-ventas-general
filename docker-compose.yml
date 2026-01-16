@@ -7,7 +7,7 @@ services:
     restart: always
     environment:
       MYSQL_DATABASE: ventas_seroficom_db
-      MYSQL_ROOT_PASSWORD: "Seroficom_Secure_2025!" # Usa comillas para evitar errores de símbolos
+      MYSQL_ROOT_PASSWORD: "Seroficom_Secure_2025!"
     ports:
       - "5073:3306"
     volumes:
@@ -24,6 +24,7 @@ services:
     environment:
       PMA_HOST: db
       PMA_ARBITRARY: 1
+      PMA_CONFIG_PARAMETERS: "$cfg['CookieSecure'] = false;"
     depends_on:
       - db
     networks:
@@ -37,14 +38,14 @@ services:
     restart: always
     ports:
       - "5070:3100"
+    env_file:
+      - ./backend/.env.production
     environment:
-      # Forzamos las variables para que Node las reconozca 100%
-      - DB_HOST=db
-      - DB_PORT=3306
-      - DB_USERNAME=root
-      - DB_PASSWORD=Seroficom_Secure_2025!
-      - DB_NAME=ventas_seroficom_db
-      - NODE_ENV=production
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_USERNAME: root
+      DB_PASSWORD: "Seroficom_Secure_2025!"
+      DB_NAME: ventas_seroficom_db
     depends_on:
       - db
     networks:
