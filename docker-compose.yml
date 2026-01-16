@@ -38,7 +38,7 @@ services:
     container_name: socventas-backend
     restart: always
     ports:
-      - "5070:3100"
+      - "5070:3150"
     environment:
       - DB_HOST=db-seroficom
       - DB_PORT=3306
