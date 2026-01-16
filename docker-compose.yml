@@ -9,7 +9,7 @@ services:
       MYSQL_DATABASE: ventas_seroficom_db
       MYSQL_ROOT_PASSWORD: "Seroficom_Secure_2025!"
     ports:
-      - "5073:3306"
+      - "5073:3309"
     volumes:
       - socventas_db_data:/var/lib/mysql
     networks:
