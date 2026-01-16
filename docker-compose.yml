@@ -11,6 +11,7 @@ services:
     ports:
       - "5073:3306"
     volumes:
+      # PROTECCIÓN DE BASE DE DATOS: Los datos persisten aunque borres el contenedor
       - socventas_vol_final_definitivo:/var/lib/mysql
     networks:
       - apps-network
@@ -38,14 +39,19 @@ services:
     container_name: socventas-backend
     restart: always
     ports:
-      - "5070:3150"
+      - "5070:3150" # Puerto que escucha el Proxy Inverso
     environment:
       - DB_HOST=db-seroficom
       - DB_PORT=3306
       - DB_USERNAME=root
-      - DB_PASSWORD=Seroficom_Secure_2025! # Coincide con el código corregido
+      - DB_PASSWORD=Seroficom_Secure_2025!
       - DB_NAME=ventas_seroficom_db
       - NODE_ENV=production
+    volumes:
+      # PROTECCIÓN DE ARCHIVOS: Mapea la carpeta real del servidor a la del contenedor
+      # Esto evita que 'public/contratos' se borre al actualizar la imagen
+      - ./backend/public/contratos:/app/dist/public/contratos
+      - ./backend/public/assets:/app/dist/public/assets
     depends_on:
       - db-seroficom
     networks:
@@ -56,4 +62,6 @@ networks:
     external: true
 
 volumes:
-  socventas_vol_final_definitivo: # Forzamos un volumen nuevo
+  # Volumen persistente para MySQL
+  socventas_vol_final_definitivo:
+    external: false
