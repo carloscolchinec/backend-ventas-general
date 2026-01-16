@@ -2,15 +2,23 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-# Instalación de dependencias
+# 1. Copiar archivos de configuración de dependencias
 COPY package*.json ./
-RUN npm install --production
+COPY tsconfig.json ./
 
-# Copia de archivos y construcción
+# 2. Instalar TODAS las dependencias (incluyendo TypeScript para el build)
+RUN npm install
+
+# 3. Copiar el código fuente
 COPY . .
+
+# 4. Ejecutar el build con logs detallados
+# Si esto falla, los logs de Portainer te dirán exactamente en qué línea de qué archivo está el error
 RUN npm run build
 
-# El puerto interno que tu app escucha es el 3100
+# 5. (Opcional) Limpiar dependencias de desarrollo para producción
+# RUN npm prune --production
+
 EXPOSE 3100
 
 CMD ["npm", "start"]
