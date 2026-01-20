@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 export class LaravelApiService {
-    private static baseUrl = "https://socisp.seroficom.com/backend/api";
+    private static baseUrl = "http://10.0.2.7:5081/api";
 
     static async getPlanes(filtros: any = {}) {
         try {
