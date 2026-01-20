@@ -1,7 +1,7 @@
 import axios from 'axios';
-dotenv.config();
 import dotenv from 'dotenv';
 
+dotenv.config();
 export class LaravelApiService {
     private static baseUrl = process.env.LARAVEL_API_URL;
 
