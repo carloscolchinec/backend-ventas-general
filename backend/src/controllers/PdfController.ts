@@ -16,6 +16,23 @@ export class PdfController {
         try {
             const serie = req.params.serie as string;
 
+            // --- 0. Check for Existing PDF (Cache) ---
+            const publicDir = path.join(process.cwd(), 'public');
+            const relativePath = `contratos/${serie}`;
+            const fullDir = path.join(publicDir, relativePath);
+            const fileName = `contrato-${serie}.pdf`;
+            const existingFilePath = path.join(fullDir, fileName);
+
+            if (fs.existsSync(existingFilePath)) {
+                // If PDF exists, serve it directly without regenerating or emailing
+                console.log(`📂 Serving cached PDF for: ${serie}`);
+                res.setHeader('Content-Type', 'application/pdf');
+                res.setHeader('Content-Disposition', `inline; filename="${fileName}"`);
+                return res.sendFile(existingFilePath);
+            }
+
+            console.log(`⚙️ PDF not found locally. Generating for: ${serie}...`);
+
             const venta = await Venta.findOne({
                 where: { serie_contrato: serie },
                 include: [
