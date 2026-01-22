@@ -16,15 +16,20 @@ app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public')); // Serve uploads/contracts
-app.use('/assets', express.static(path.join(__dirname, '../src/assets'))); // Serve src assets if needed dev
+app.use(express.static(path.join(__dirname, '../dist'))); // Serve Vue/Vite App
+
+// View Engine Setup
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 
 // Routes
+import pdfRoutes from './routes/pdfRoutes';
 app.use('/api', routes);
+app.use('/pdf', pdfRoutes);
 
-// 404 Handler
-app.use((req, res) => {
-    // res.status(404).json({ message: 'Ruta no encontrada' });
-    res.redirect(301, 'https://seroficom.com');
+// Catch-all handler for SPA (Must be last)
+app.get(/.*/, (req, res) => {
+    res.sendFile(path.join(__dirname, '../dist/index.html'));
 });
 
 export default app;

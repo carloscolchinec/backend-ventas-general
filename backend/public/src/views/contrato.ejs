@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>CONTRATO DE ADHESIÓN</title>
+    <style>
+        /* Reset & Base Styles */
+        body {
+            font-family: "Times New Roman", Times, serif;
+            font-size: 12px;
+            line-height: 1.5;
+            margin: 0;
+            padding: 0;
+            color: #000;
+            position: relative; /* Context */
+            background: transparent; /* Ensure watermark shows */
+        }
+
+        /* Watermark */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%; height: 90%; 
+            background: url('<%= logoSocnetBackground %>') no-repeat center center;
+            background-size: contain;
+            opacity: 0.15;
+            z-index: -1;
+            /* No pointer-events needed if z-index is -1 */
+        }
+
+        @page {
+            /* Top margin reserves space for the repeated header */
+            margin: 120px 50px 50px 50px;
+        }
+
+        /* Header Layout: Fixed position repeats on every printed page */
+        header {
+            position: fixed;
+            top: -100px; /* Move into the reserved top margin */
+            left: 0; right: 0;
+            height: 80px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-left {
+            height: 60px;
+            width: auto;
+        }
+
+        .logo-right {
+            height: 50px;
+            width: auto;
+        }
+
+        /* Typography & Titles */
+        h1 {
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            text-transform: uppercase;
+            margin: 20px 0 30px 0;
+        }
+
+        h2.section-title {
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            text-align: justify;
+            margin-bottom: 10px;
+        }
+
+        /* Tables */
+        table.data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+            margin-bottom: 20px;
+        }
+
+        table.data-table th, table.data-table td {
+            border: 1px solid #ccc; /* Light grey border */
+            padding: 5px 8px;
+            vertical-align: middle;
+        }
+
+        table.data-table th {
+            text-align: center;
+            font-weight: bold;
+            text-transform: uppercase;
+            background-color: #fff;
+        }
+
+        /* Specific modifications for first page table */
+        table.provider-table td:first-child {
+            font-weight: bold;
+            width: 35%;
+        }
+
+        /* Subscriber Data Section */
+        .subscriber-data {
+            margin-top: 10px;
+        }
+
+        .subscriber-line {
+            margin-bottom: 5px;
+            display: flex;
+            align-items: baseline;
+        }
+
+        .subscriber-label {
+            font-weight: bold;
+            margin-right: 5px;
+            min-width: 150px;
+        }
+
+        /* Lists */
+        ul {
+            list-style-type: none; /* Bullet handled manually or default */
+            padding-left: 20px;
+            margin: 5px 0;
+        }
+        ul li::before {
+            content: "• ";
+            font-weight: bold;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <!-- PAGE 1 HEADER -->
+    <header>
+        <img src="<%= logoSeroficom %>" class="logo-left" alt="Seroficom">
+        <img src="<%= logoSocnet %>" class="logo-right" alt="Socnet">
+    </header>
+
+    <h1>CONTRATO DE ADHESIÓN</h1>
+
+    <p>
+        Quienes comparecen libre y voluntariamente convienen en celebrar y suscribir el presente contrato de Prestación
+        de Servicios, de conformidad con las cláusulas que a continuación se detallan:
+    </p>
+
+    <h2 class="section-title">CLAUSULA PRIMERA: LUGAR Y FECHA.- DATOS DE LOS COMPARECIENTES.-</h2>
+
+    <p>
+        En la ciudad de <strong><%= datosPrestador.ciudad_fecha || 'SANTA ELENA' %></strong>,
+        <strong><%= (fechaActual || '' ).toUpperCase() %></strong> comparecen a celebrar, como en efecto celebran el presente Contrato de Adhesión, las siguientes
+        personas: Uno.- El Sr. JORGE ARTURO SUAREZ INTRIAGO representante legal de la empresa SERVICIO DE OFICINA
+        COMPUTARIZADO SEROFICOM S.A., a quien en adelante se lo denominará EL PRESTADOR, los datos se detallan a
+        continuación:
+    </p>
+
+    <h2 class="section-title">DATOS DEL PRESTADOR:</h2>
+
+    <table class="data-table provider-table">
+        <tr><td>NOMBRE/RAZÓN SOCIAL</td><td>SERVICIO DE OFICINA COMPUTARIZADO SEROFICOM S.A.</td></tr>
+        <tr><td>NOMBRE COMERCIAL</td><td>SOCNET</td></tr>
+        <tr><td>DIRECCIÓN</td><td><%= datosPrestador.direccion || 'Barrio Guayaquil, Calle 3ra y Av. 3ra' %></td></tr>
+        <tr><td>PROVINCIA</td><td><%= datosPrestador.provincia || 'SANTA ELENA' %></td></tr>
+        <tr><td>CIUDAD</td><td><%= datosPrestador.ciudad || 'SANTA ELENA' %></td></tr>
+        <tr><td>CANTÓN</td><td><%= datosPrestador.canton || 'SANTA ELENA' %></td></tr>
+        <tr><td>PARROQUIA</td><td><%= datosPrestador.parroquia || 'SAN JOSÉ DE ANCÓN' %></td></tr>
+        <tr><td>N° DE TELÉFONO</td><td><%= datosPrestador.telefono || '0958933197' %></td></tr>
+        <tr><td>RUC</td><td>0993238155001</td></tr>
+        <tr><td>CORREO ELECTRÓNICO</td><td>info@seroficom.org</td></tr>
+        <tr><td>PÁGINA WEB</td><td>www.seroficom.org</td></tr>
+    </table>
+
+    <h2 class="section-title">DATOS DEL ABONADO/SUSCRIPTOR:</h2>
+
+    <div class="subscriber-data">
+        <div class="subscriber-line"><span class="subscriber-label">CEDULA:</span><span><%= cliente.identificacion %></span></div>
+        <div class="subscriber-line"><span class="subscriber-label">NOMBRES:</span><span><%= cliente.nombres %></span></div>
+        <div class="subscriber-line"><span class="subscriber-label">APELLIDOS:</span><span><%= cliente.apellidos %></span></div>
+        <div class="subscriber-line"><span class="subscriber-label">NACIONALIDAD:</span><span>ECUATORIANA</span></div>
+        <div class="subscriber-line"><span class="subscriber-label">DIRECCIÓN COMPLETA:</span><span><%= cliente.direccion %></span></div>
+        <div class="subscriber-line"><span class="subscriber-label">TELÉFONO:</span>
+            <span><% if(cliente.telefonos && cliente.telefonos.length> 0) { %><%= cliente.telefonos %><% } else { %>0987654321<% } %></span>
+        </div>
+        <div class="subscriber-line"><span class="subscriber-label">EMAIL:</span>
+            <span><% if(cliente.correos && cliente.correos.length> 0) { %><%= cliente.correos %><% } else { %>No registrado<% } %></span>
+        </div>
+        <div class="subscriber-line" style="margin-top: 10px;">
+            <span class="subscriber-label" style="min-width: auto; margin-right: 15px;">¿EL ABONADO ES ADULTO MAYOR O DISCAPACITADO?</span>
+            <span>SI <%= (cliente.es_tercera_edad || cliente.es_presenta_discapacidad) ? '&nbsp;X' : '&nbsp;' %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NO <%= (!cliente.es_tercera_edad && !cliente.es_presenta_discapacidad) ? '&nbsp;X' : '&nbsp;' %></span>
+        </div>
+    </div>
+
+    <p style="margin-top: 15px;">En caso afirmativo, aplica el beneficio del 50% de reducción de la tarifa básica de internet de acuerdo al plan del prestador.</p>
+
+
+    <!-- PAGE BREAK -->
+    <div style="page-break-before: always;"></div>
+
+    <!-- PAGE 2 HEADER (Automatically handled by CSS fixed position) -->
+
+
+    <!-- SPACER removed as margin handles it -->
+
+    <h2 class="section-title">CLÁUSULA SEGUNDA: OBJETO.-</h2>
+    <p>El prestador del servicio se compromete a proporcionar al abonado/suscriptor el/los siguiente(s) servicio(s) para lo cual el prestador dispone de los correspondientes títulos habilitantes otorgados por la ARCOTEL, de conformidad con el ordenamiento jurídico vigente:</p>
+
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th style="width: 50%;">SERVICIO</th>
+                <th style="width: 50%;">SELECCIONADO</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="text-align: left; padding-left: 20px;">Acceso a internet</td>
+                <td style="text-align: center;">X</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>Las condiciones del/los servicio(s) que el abonado va a contratar se encuentran detalladas en el Anexo N° 1, el cual forma parte integrante del presente contrato.</p>
+
+    <h2 class="section-title">CLÁUSULA TERCERA: VIGENCIA DEL CONTRATO.</h2>
+    <p>El presente contrato, tendrá un plazo de vigencia de <strong>12 MESES</strong>, y entrará en vigencia a partir de la fecha de instalación y prestación efectiva del servicio...</p>
+    <p>El ABONADO acepta la renovación automática sucesiva del contrato: <strong>SI X &nbsp;&nbsp; NO</strong></p>
+
+    <h2 class="section-title">CLÁUSULA CUARTA: PERMANENCIA MÍNIMA</h2>
+    <p>¿El ABONADO se acoge al período de permanencia mínima? <strong>SI X &nbsp;&nbsp; NO</strong></p>
+    <ul>
+        <li>Descuento del 100% en el servicio de instalación.</li>
+    </ul>
+
+    <h2 class="section-title">CLÁUSULA QUINTA: TARIFA Y FORMA DE PAGO</h2>
+    <p>Puede consultar las tarifas mensuales en el Anexo 1F. Si su forma de pago es débito bancario, encontrará el formulario de autorización en el Anexo 1.</p>
+
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th style="width: 60%;">FORMA DE PAGO</th>
+                <th style="width: 20%;">SI</th>
+                <th style="width: 20%;">NO</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Pago directo en cajas del prestador</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Débito automático cuenta de ahorros</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Pago en ventanilla de locales autorizados</td>
+                <td style="text-align: center;">X</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Débito con tarjeta de crédito</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Transferencia vía medios electrónicos</td>
+                <td style="text-align: center;">X</td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>La tarifa correspondiente al servicio contratado y efectivamente prestado, estará dentro de los techos tarifarios señalados por la ARCOTEL y en los títulos habilitantes correspondientes, en caso de que se establezcan, de conformidad con el ordenamiento jurídico vigente.</p>
+
+    <p>En caso de que el ABONADO o suscritor desee cambiar su modalidad de pago a otra de las disponibles, deberá comunicar al PRESTADOR del servicio con quince (15) días de anticipación. El prestador del servicio, luego de haber sido comunicado, instrumentará la nueva forma de pago.</p>
+
+</body>
+</html>
