@@ -324,7 +324,8 @@ export class VentasController {
                 const port = process.env.PORT || 3150;
                 // Use 127.0.0.1 for reliability within server context
                 // Route defined in app.ts is: app.use('/pdf', ... ) -> pdfRoutes: router.get('/contrato/:serie', ...)
-                const pdfTriggerUrl = `http://127.0.0.1:${port}/pdf/contrato/${serieContrato}`;
+                // Add ?mode=created to signal this is the initial generation (sends email)
+                const pdfTriggerUrl = `http://127.0.0.1:${port}/pdf/contrato/${serieContrato}?mode=created`;
                 
                 console.log(`🚀 [Auto-Job] Triggering PDF & Email via: ${pdfTriggerUrl}`);
                 

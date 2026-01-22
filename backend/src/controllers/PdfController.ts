@@ -267,14 +267,21 @@ export class PdfController {
                 fs.writeFileSync(pdfPath, pdfBuffer);
                 console.log(`✅ PDF Saved locally at: ${pdfPath}`);
 
+                console.log(`✅ PDF Saved locally at: ${pdfPath}`);
+
                 // --- 4. Send Email (Backend Logic) ---
-                try {
-                    // Use contacto.correos which was defined earlier
-                    const emailsToSend = contacto ? contacto.correos : [];
-                    await sendContractEmail(emailsToSend, `${c.nombres} ${c.apellidos}`, pdfPath, pdfName);
-                    console.log('📧 Email sent successfully.');
-                } catch (emailErr) {
-                    console.error('❌ Error sending email:', emailErr);
+                // Only send email if explicitly triggered in 'created' mode (Auto-Job)
+                if (req.query.mode === 'created') {
+                    try {
+                        // Use contacto.correos which was defined earlier
+                        const emailsToSend = contacto ? contacto.correos : [];
+                        await sendContractEmail(emailsToSend, `${c.nombres} ${c.apellidos}`, pdfPath, pdfName);
+                        console.log('📧 Email sent successfully (Creation Mode).');
+                    } catch (emailErr) {
+                        console.error('❌ Error sending email:', emailErr);
+                    }
+                } else {
+                    console.log('ℹ️ Email skipped (View/Regenerate Mode).');
                 }
 
                 // --- 5. Serve PDF ---
